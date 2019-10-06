@@ -28,7 +28,7 @@ var nBreeders int
 func init() {
 	fmt.Println("init, GOAL:", GOAL)
 	rand.Seed(time.Now().UnixNano())
-	for i := 2; i < POPULATION; i++ { // the number of breeders for which
+	for i := 2; i < POPULATION; i++ {     // the number of breeders for which
 		if (i*i-i)>>1 >= POPULATION { //the number of all combinations will equal POPULATION count.
 			nBreeders = i
 			break
@@ -68,7 +68,7 @@ func mutate(i *individual) {
 
 func crossover(a,b, oa, ob *individual) {// two-point. half of genes swapped
 	c1 := rand.Intn(len(GOAL)>>1) // {0..len/2}
-	c2 := c1+(len(GOAL)>>1) 		// c1+{0..len/2}
+	c2 := c1+(len(GOAL)>>1)       // c1+len/2
 	for j := range(GOAL) {
 		if j< c1 ||  j > c2 {
 			oa.chrome[j], ob.chrome[j] = b.chrome[j], a.chrome[j]
