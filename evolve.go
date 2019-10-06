@@ -1,5 +1,4 @@
 package main
-
 /// By Joe Bumstead ___________ Licence: MIT
 
 import (
