@@ -70,7 +70,7 @@ func crossover(a,b, oa, ob *individual) {// two-point. half of genes swapped
 	c1 := rand.Intn(len(GOAL)>>1) // {0..len/2}
 	c2 := c1+(len(GOAL)>>1)       // c1+len/2
 	for j := range(GOAL) {
-		if j< c1 ||  j > c2 {
+		if c1 < j || j < c2 {
 			oa.chrome[j], ob.chrome[j] = b.chrome[j], a.chrome[j]
 		} else {
 			oa.chrome[j], ob.chrome[j] = a.chrome[j], b.chrome[j]
