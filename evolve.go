@@ -11,9 +11,9 @@ import (
 
 const (
 	LETTERS = "abcdefghijklmnopqrstuvwxyz:' -;.,() ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	POPULATION = 21  // odd number to make room for the elite one.
-	MUTATE_LIKELY = .27
-	GENERATIONS = 77777
+	POPULATION = 17  // odd number to make room for the elite one.
+	MUTATE_LIKELY = .37
+	GENERATIONS = 7777
 	MAXERR = .77
 	GOAL = "There are only three kinds of people in the world: Those who can count and those who can't."
 )
@@ -29,13 +29,15 @@ var nBreeders int
 func init() {
 	fmt.Println("init, GOAL:", GOAL)
 	rand.Seed(time.Now().UnixNano())
-	for i := 2; i < POPULATION; i++ { // the number of breeders for which
-		if (i*i-i)>>1 > POPULATION { //the number of all combinations will equal POPULATION count.
-			nBreeders = i
-			break
+	pp := 0
+	for i := 1; i < 7777; i++ {// get breeder count for which all combinations is >= POPULATION count.
+		pp += i*2
+		if pp >= POPULATION {
+			nBreeders = i+1
+			fmt.Println("nBreeders", nBreeders)
+			return
 		}
 	}
-	fmt.Println("nBreeders", nBreeders)
 }
 
 func fitness(pop *popu) (e float32) {// the number of chars in individual that match chars in GOAL.
@@ -55,14 +57,16 @@ func mutate(i *individual) {
 	i.chrome[c] = LETTERS[rand.Intn(len(LETTERS))]
 }
 
-func crossover(a,b, oa, ob *individual) {// two-point. half of genes swapped
+func crossover(a,b, oa, ob *[len(GOAL)]byte) {// two-point. half of genes swapped
 	c1 := rand.Intn(len(GOAL)>>1) // {0..len/2}
 	c2 := c1+(len(GOAL)>>1) 		// c1+len/2
 	for j := range(GOAL) {
 		if c1 <= j &&  j < c2 {
-			oa.chrome[j], ob.chrome[j] = b.chrome[j], a.chrome[j]
+			oa[j] = b[j]
+			ob[j] = a[j]
 		} else {
-			oa.chrome[j], ob.chrome[j] = a.chrome[j], b.chrome[j]
+			oa[j] = b[j]
+			ob[j] = b[j]
 		}
 	}
 }
@@ -72,19 +76,20 @@ func regen(pop *popu) {
 	sort.Slice(pop[:], func(i, j int) bool {
 	  return pop[i].fitness > pop[j].fitness
 	})
+
 	breeders = append(pop[:0:0], pop[0:nBreeders]...)
 	ipop := 1 // skip pop[0], the elite
 	for  {// all populace
-		for i := 0; i < len(breeders)-1; i++ {// crossover all combinations of breeders
-			for j := i+1; j < len(breeders); j++ {
-				crossover(&breeders[i], &breeders[j], &pop[ipop], &pop[ipop+1])
+		for i := 1; i < len(breeders); i++ {// crossover all combinations of breeders
+			for j := 0; j < i; j++ {
+				crossover(&breeders[i].chrome, &breeders[j].chrome, &pop[ipop].chrome, &pop[ipop+1].chrome)
 				ipop += 2
-				if ipop >= len(pop)-1 {goto xit}
+				if ipop >= POPULATION-1 {goto xit}
 			}
 		}
 	}
 	xit:
-	for i := 1; i < POPULATION; i++ { mutate(&pop[i]) }// skip pop[0], the elite
+	for i := 1; i < POPULATION; i++ { mutate(&pop[i]) }// skip pop[0], the elite//!!!! now in fitness()
 }
 
 func randChrome() *[len(GOAL)]byte {
