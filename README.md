@@ -18,4 +18,4 @@ But it does simply show in a few lines of code how to evolve a solution using:
 
 Add it to your go projects and try it today!
 
-# Or try it right now at Playground: https://play.golang.org/p/vyJ-qfJhO_k
+## Or try it right now at Playground: https://play.golang.org/p/vyJ-qfJhO_k
