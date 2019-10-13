@@ -89,7 +89,7 @@ func regen(pop *popu) {
 		}
 	}
 	xit:
-	for i := 1; i < POPULATION; i++ { mutate(&pop[i]) }// skip pop[0], the elite//!!!! now in fitness()
+	for i := 1; i < POPULATION; i++ { mutate(&pop[i]) }// skip pop[0], the elite
 }
 
 func randChrome() *[len(GOAL)]byte {
