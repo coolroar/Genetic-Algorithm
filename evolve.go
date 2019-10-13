@@ -65,7 +65,7 @@ func crossover(a,b, oa, ob *[len(GOAL)]byte) {// two-point. half of genes swappe
 			oa[j] = b[j]
 			ob[j] = a[j]
 		} else {
-			oa[j] = b[j]
+			oa[j] = a[j]
 			ob[j] = b[j]
 		}
 	}
